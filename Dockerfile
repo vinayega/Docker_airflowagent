@@ -55,6 +55,16 @@ COPY requirements.txt .
 RUN python3 -m pip download -qr requirements.txt; \
     python3 -m pip install -qr requirements.txt; 
 
+#Install Terradata Client
+ADD TeradataToolsAndUtilitiesBase__linux_x8664.17.20.09.00-1.tar.gz /usr/src/terradataClient
+RUN cd /usr/src/terradataClient/TeradataToolsAndUtilitiesBase; \
+    ./setup.sh a
+
+# WORKDIR /usr/src/terradataClient
+# RUN gzip TeradataToolsAndUtilitiesBase__linux_x8664.17.20.09.00-1.tar.gz; \
+#     tar --extract --directory /usr/src/terradataClient --strip-components=1 --file TeradataToolsAndUtilitiesBase__linux_x8664.17.20.09.00-1.tar
+
+
 #Install Perl 
 
 RUN mkdir -p /usr/src/perl; \
@@ -68,6 +78,10 @@ RUN mkdir -p /usr/src/perl; \
 
 RUN yum -y install perl
 
+WORKDIR /work
+COPY testfile.py .
+
+CMD ["python3", "testfile.py"]
 
 # RUN curl -O get-pip.py "$PYTHON_GET_PIP_URL"; 
     
